@@ -1,0 +1,948 @@
+//STUDENT MANAGEMENT PROJECT
+
+/*header files*/
+#include<iostream.h>
+#include<conio.h>
+#include<stdio.h>
+#include<iomanip.h>
+#include<string.h>
+#include<dos.h>
+#include<math.h>
+#include<process.h>
+#include<ctype.h>
+#include<fstream.h>
+
+
+
+//FUNCTIONS
+void detail(void); //to enter details of students
+void marks(void);  //to show result of students
+void choice(int); //to enter choice by teachers
+void grade(void);  //to show result of class
+void search(void); //to search a record
+void del(void);    //to delete a record
+void modify(void); //to modify a record
+void topper(void); //students scoring above 75%
+void failure(void);//students scoring below 33%
+void insert(void); //to insert a record in between
+void newr(int);    //to write new record in file
+void choice1(void);//to enter choice by student
+int enter(void);   //to enter the type of user
+
+
+
+
+class student
+{
+       public:	int rollno;
+	char name[50];
+	int p_marks, c_marks, m_marks, e_marks, cs_marks;
+	float per;
+	char grade;
+	int calculate();//function to calculate grade
+public:
+	student()
+	{per=0.0;}                //to initialise per using constructor
+	int getdata();		//function to accept data from user
+	void showdata();	//function to show all data on screen
+	void show_tabular();    //function to show in tabular
+	void putdata();         //function to show rollno.,name,percentage
+	int getrollno();
+	int newdata();
+}s[50],s1[50]; //class ends here
+
+
+
+
+int student::calculate()
+{
+	per=(p_marks+c_marks+m_marks+e_marks+cs_marks)/5.0;
+	if(per>=60)
+		grade='A';
+	else if(per>=50)
+		grade='B';
+	else if(per>=33)
+		grade='C';
+	else
+		grade='D';
+	return per;
+}
+
+
+
+
+int student::getdata()
+{
+	float x;
+	char email[20];
+	int count=0;
+	b:cout<<"\n\n\t\tEnter The roll number of student ";
+	cin>>rollno;
+
+	if(rollno==0)
+	{
+		cout<<"\n\n\t\troll number not valid"<<endl;
+		goto b;
+	}
+
+	a:cout<<"\n\n\t\tEnter The Name of student ";
+	gets(name);
+	if(strlen(name)==0)
+	{
+		cout<<"\n\n\t\tname cannot be left blank "<<endl;
+		goto a;
+	}
+
+	cout<<"\n\n\t\tEnter email id of student ";
+	v:gets(email);
+	count=0;
+	for(int i=0;email[i]!='\0';i++)
+	 {
+	   if(email[i]=='@'|| email[i]=='.')
+	   count++;
+	 }
+	if(count!=2)
+	 {
+	   cout<<"\n\n\t\tInvalid email id...Enter again"<<endl<<"\t\t";
+	   goto v;
+	 }
+	else if(strlen(email)==0)
+	 {
+	    cout<<"\n\n\t\tCannot be left blank...Enter again"<<endl<<"\t\t";
+	    gets(email);
+	 }
+
+	c:cout<<"\n\n\t\tEnter The marks in physics out of 100 : ";
+	cin>>p_marks;
+	if(p_marks>100 || p_marks<0)
+	{
+		cout<<"\n\n\t\tmarks not valid";
+		goto c;
+	}
+
+	d:cout<<"\n\n\t\tEnter The marks in chemistry out of 100 : ";
+	cin>>c_marks;
+	if(c_marks>100 || c_marks<0)
+	{
+		cout<<"\n\n\t\tmarks not valid";
+		goto d;
+	}
+
+	e:cout<<"\n\n\t\tEnter The marks in maths out of 100 : ";
+	cin>>m_marks;
+	if(m_marks>100 || m_marks<0)
+	{
+		cout<<"\n\n\t\tmarks not valid";
+		goto e;
+	}
+
+	f:cout<<"\n\n\t\tEnter The marks in english out of 100 : ";
+	cin>>e_marks;
+	if(e_marks>100 || e_marks<0)
+	{
+		cout<<"\n\n\t\tmarks not valid";
+		goto f;
+	}
+
+	g:cout<<"\n\n\t\tEnter The marks in computer science out of 100 : ";
+	cin>>cs_marks;
+	if(cs_marks>100 || cs_marks<0)
+	{
+		cout<<"\n\n\t\tmarks not valid";
+		goto g;
+	}
+
+	x=calculate();
+	return x;
+}
+
+
+
+
+void student::showdata()
+{
+	cout<<"\n\n\t\tRoll number of student : "<<rollno;
+	cout<<"\n\n\t\tName of student : "<<name;
+	cout<<"\n\n\t\tMarks in Physics : "<<p_marks;
+	cout<<"\n\n\t\tMarks in Chemistry : "<<c_marks;
+	cout<<"\n\n\t\tMarks in Maths : "<<m_marks;
+	cout<<"\n\n\t\tMarks in English : "<<e_marks;
+	cout<<"\n\n\t\tMarks in Computer Science :"<<cs_marks;
+	cout<<"\n\n\t\tPercentage of student is  :"<<setprecision(2)<<per;
+	cout<<"\n\n\t\tGrade of student is :"<<grade;
+}
+
+
+
+void student::putdata()
+{
+	cout<<"\n\n\t\tROLL NUMBER: "<<rollno;
+	cout<<"\n\n\t\tNAME: "<<name;
+	cout<<"\n\n\t\tPERCENTAGE:"<<setprecision(2)<<per;
+}
+
+
+
+void student::show_tabular()
+{
+
+	cout<<rollno<<setw(6)<<" "<<name<<setw(6)<<p_marks<<setw(8)<<c_marks<<setw(9)<<m_marks<<setw(9)
+		<<e_marks<<setw(9)<<cs_marks<<setw(10)<<setprecision(2)<<per<<"%"<<setw(6)<<" "<<grade<<endl;
+	//seprecision(2) to display till 2 decimal points
+}
+
+
+
+
+int  student::getrollno()
+{
+	return rollno;
+}
+//class functions end here
+
+
+
+void main()
+{
+	char c;
+	int z,n=0;
+	clrscr();
+
+	gotoxy(25,20);
+	cout<<"STUDENT MANAGEMENT PROJECT";
+	gotoxy(60,40);
+	cout<<"EFFORTS BY";
+	gotoxy(60,42);
+	cout<<"SHINJANEE GUPTA";
+	gotoxy(60,44);
+	cout<<"AND";
+	gotoxy(60,46);
+	cout<<"AKSHITA GUPTA";
+	gotoxy(60,48);
+	cout<<"XII-A";
+	delay(4000);
+	clrscr();
+
+	z=enter();
+
+	clrscr();
+	x:cout<<"\n\n\n\n    Enter 'y' to continue"<<endl<<"    ";
+	cin>>c;
+
+	clrscr();
+
+	if(c =='y'||c=='Y')
+		{
+			if(z==1)
+			{
+			  clrscr();
+			  n++;
+			  choice(n);
+			  clrscr();
+			  goto x;
+			}
+
+			else if(z==2)
+			{
+			  clrscr();
+			  choice1();
+			  clrscr();
+			  goto x;
+			}
+		} //end of if
+
+	else
+	exit(0);
+
+	clrscr();
+
+} //end of main
+
+
+
+int enter()
+{
+	int ch=0,f=0;
+	char c;
+	m:cout<<"\n\n\n\n    Enter an option"<<endl<<"\n    1.TEACHER"<<endl<<"\n    2.STUDENT"<<endl<<"\n    3.EXIT"<<endl<<endl<<"    ";
+	cin>>ch;
+
+	f=ch;
+
+
+	clrscr();
+
+	switch(f)
+	{
+	case 1: choice(0);
+		break;
+
+	case 2: choice1();
+		break;
+
+	case 3: exit(0);
+
+	default: {
+		   cout<<"ENTER A SUITABLE CHOICE";
+		   delay(3000);
+		   clrscr();
+		   goto m;
+		  }
+	}//end of switch
+
+	return f;
+
+}//end of enter function
+
+
+
+
+
+
+
+void choice(int n)
+{
+	int count=n;
+	count++;
+
+	if(count==1) 	//to enter password
+	{
+		char a[7];
+		int i,j;
+		cout<<"\n\n\t\tEnter password\t";
+		for(i=0;i<8;i++)
+		 {
+		   a[i]=getch();
+
+		   if(a[i]==13)     //13 is for enter
+		   break;
+
+		   else
+		   printf("*");
+		 }
+
+		a[i]='\0';
+		if(strcmp(a,"computer")==0)                             //if password is "computer"
+		{
+			cout<<"\n\n\t\tACCESS PROVIDED!!\n\n";
+			getch();
+		}
+
+		else
+		{
+			cout<<"\n\n\t\tACCESS ABORTED!!\n\n";
+			delay(3000);
+			exit(0);
+		}
+
+		clrscr();
+	}
+
+	int ch;
+
+	s:cout<<"\t\t***********************"<<endl<<"\t\tENTER YOUR CHOICE"<<endl<<"\t\t***********************\n"<<endl;
+	cout<<"\t\t1.ENTER DETAILS"<<endl<<"\n\t\t2.SEARCH A RECORD"<<endl<<"\n\t\t3.MODIFY A RECORD"<<endl<<"\n\t\t4.DELETE A RECORD"<<endl<<"\n\t\t5.INSERT A RECORD"<<endl;
+	cout<<"\n\t\t6.STUDENTS ABOVE 75%"<<endl<<"\n\t\t7.STUDENTS BELOW 33%"<<endl<<"\n\t\t8.RESULT OF CLASS"<<endl<<"\n\t\t9.TABULAR RESULT"<<endl<<"\n\t\t10.EXIT FROM FILE"<<endl;
+	cout<<"\t\t";
+	cin>>ch;
+	clrscr();
+
+	switch(ch)
+		{
+			case 1: detail();
+				break;
+
+			case 2: search();
+				break;
+
+			case 3: modify();
+				break;
+
+			case 4: del();
+				break;
+
+			case 5: insert();
+				break;
+
+			case 6: topper();
+				break;
+
+			case 7: failure();
+				break;
+
+			case 8: marks();
+				break;
+
+			case 9: grade();
+				break;
+
+			case 10: exit(0);
+
+			default:{
+				cout<<"ENTER A SUITABLE CHOICE";
+				delay(1000);
+				clrscr();
+				goto s;
+				}
+
+		} //end of switch
+}  //end of choice function
+
+
+
+void choice1()
+{
+	clrscr();
+	int ch;
+	t:cout<<"\n\n\t\t***********************"<<endl<<"\n\t\tENTER YOUR CHOICE"<<endl<<"\n\t\t***********************\n"<<endl<<endl;
+	cout<<"\n\t\t1.SEARCH A RECORD"<<endl<<"\n\t\t2.STUDENTS ABOVE 75%"<<endl<<"\n\t\t3.STUDENTS BELOW 33%"<<endl<<"\n\t\t4.RESULT OF CLASS"<<endl<<"\n\t\t5.TABULAR RESULT"<<endl<<"\n\t\t6.EXIT FROM FILE\n"<<endl;
+	cout<<"\n\n\t\t";
+	cin>>ch;
+
+	clrscr();
+
+	switch(ch)
+		{
+			case 1: search();
+				break;
+
+			case 2: topper();
+				break;
+
+			case 3: failure();
+				break;
+
+			case 4: marks();
+				break;
+
+			case 5: grade();
+				break;
+
+			case 6: exit(0);
+
+			default:{
+				cout<<"ENTER A SUITABLE CHOICE";
+				delay(1000);
+				clrscr();
+				goto t;
+				}
+		}//end of switch
+
+}//end of function
+
+
+
+
+int n,i=0;
+void detail()
+  {
+	n++;    //to count no. of records
+	student st;
+	float x[50];
+	ofstream outFile;
+	ofstream outfile,out;
+	outFile.open("student.dat",ios::binary|ios::app);
+	outfile.open("topper.dat",ios::binary|ios::app);
+	out.open("failure.dat",ios::binary|ios::app);
+	char ch='y';
+
+	while(ch=='y'||ch=='Y')
+	{
+	   n++;    //to count no. of records
+	   x[i]=s[i].getdata();
+
+	   if(x[i]>=75)
+	   outfile.write((char*)&s[i],sizeof(student));
+
+	   if(x[i]<33)
+	   out.write((char*)&s[i],sizeof(student));
+
+	   cout<<"\n\n\t\tStudent record Has Been Created ";
+	   cout<<endl<<endl<<"\t\tDo you want to enter more   ";
+	   cin>>ch;
+	   i++;
+	   clrscr();
+	} //end of while
+
+	//to sort the roll numbers
+	if(n!=1)
+	{
+	for(i=0;i<n;i++)
+	{
+	   for(int j=0;j<n;j++)
+	    {
+	      if(s[j].getrollno() > s[j+1].getrollno())
+	       {
+		  s1[i]=s[j];
+		  s[j]=s[j+1];
+		  s[j+1]=s1[i];
+		}
+	    }
+	}
+	}
+
+
+	for(i=0;i<=n;i++)
+	{
+		if(s[i].getrollno()!=0)
+		outFile.write((char *)&s[i],sizeof(student));
+	}
+
+
+
+	outFile.close();
+	outfile.close();
+	out.close();
+
+} //end of detail function
+
+
+
+
+void marks()
+{
+	student st;
+	ifstream inFile;
+	inFile.open("student.dat",ios::in|ios::binary);
+
+	if(!inFile)
+	{
+		cout<<"\n\n\t\tFile could not be opened !!";
+		getch();
+		return;
+	}
+
+	while(inFile.read((char *) &st, sizeof(student)))
+	{
+		st.putdata();
+		cout<<"\n\n\t\t**********************************\n";
+	}
+
+	inFile.close();
+	getch();
+
+}
+
+
+
+
+void grade()
+{
+	student st;
+	ifstream inFile;
+	inFile.open("student.dat",ios::in|ios::binary);
+
+	if(!inFile)
+	{
+		cout<<"\n\n\t\tFile could not be opened !! ";
+		getch();
+		return;
+	}
+
+	cout<<"\n\n\t\t\t\tCLASS REPORT \n\n";
+	cout<<"*******************************************************************************\n\n";
+	cout<<"R.No   Name        PHY     CHEM     MATHS     ENG     COMPSC     %AGE     GRADE"<<endl<<endl;
+	cout<<"********************************************************************************\n\n";
+
+	while(inFile.read((char *) &st, sizeof(student)))
+	{
+		st.show_tabular();
+		cout<<endl;
+	}
+
+	getch();
+	inFile.close();
+}
+
+
+
+
+void search()
+{
+	int rn;
+	cout<<"\n\n\t\tEnter roll number to be searched  ";
+	cin>>rn;
+	student st;
+	ifstream inFile;
+	inFile.open("student.dat",ios::in);
+
+	if(!inFile)
+	{
+	   cout<<"\n\n\t\tFile could not be opened";
+	   cout<<endl<<endl;
+	   cout<<"\t\tPROCESSING.....";
+	   delay(3000);
+	}
+
+	inFile.seekg(0,ios::beg);  //to go to beginning of file
+	int flag =0;
+
+	while(inFile.read((char*)&st,sizeof(student)))
+	{
+		if(st.getrollno()==rn)
+		{
+			st.showdata();
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+			flag=1;
+			break;
+		}//end of if
+	}//end of while
+
+	inFile.close();
+
+	if (flag==0)
+	  {
+	    cout<<"\n\n\t\tRecord not found";
+	    cout<<endl<<endl;
+	    cout<<"\t\tPROCESSING.....";
+	    delay(3000);
+	 }
+}
+
+
+
+
+void del()
+{
+	student st;
+	int rn;
+	cout<<"\n\n\t\tEnter roll number to be deleted  ";
+	cin>>rn;
+	ifstream inFile,infile,in,a,b;
+	inFile.open("student.dat",ios::binary|ios::in);        //in binary,no character translations
+	infile.open("topper.dat",ios::binary|ios::in);
+	in.open("failure.dat",ios::binary|ios::in);
+	if(!inFile)
+		{
+			cout<<"\n\n\t\tFile could not be found";
+			delay(3000);
+		}
+
+	ofstream outFile,outfile,out,c,d;
+	outFile.open("temp.dat",ios::out);
+	outfile.open("toppers.dat",ios::out);
+	out.open("failures.dat",ios::out);
+
+
+	inFile.seekg(0,ios::beg);  //to go to beginning of file
+
+	while(inFile.read((char*)&st,sizeof(student)))
+		{
+			if(st.getrollno()!=rn)
+			  {
+				outFile.write((char*)&st,sizeof(student));
+			  }
+		}//end of while
+
+	infile.seekg(0,ios::beg);  //to go to beginning of file
+
+	//to change list of students above 75%
+	while(infile.read((char*)&st,sizeof(student)))
+		{
+			if(st.getrollno()!=rn)
+			  {
+				outfile.write((char*)&st,sizeof(student));
+			  }
+		}//end of while
+
+	in.seekg(0,ios::beg);  //to go to beginning of file
+
+	//to change list of students below 33%
+	while(in.read((char*)&st,sizeof(student)))
+		{
+			if(st.getrollno()!=rn)
+			  {
+				out.write((char*)&st,sizeof(student));
+			  }
+		}//end of while
+
+
+	cout<<"\n\n\t\tRoll number has been deleted!"<<endl;
+	cout<<endl<<endl;
+	cout<<"\t\tPROCESSING.....";
+	delay(3000);
+	outFile.close();
+	outfile.close();
+	out.close();
+	inFile.close();
+	infile.close();
+	in.close();
+	remove("student.dat");
+	remove("topper.dat");
+	remove("failure.dat");
+	rename("temp.dat","student.dat");
+	rename("toppers.dat","topper.dat");
+	rename("failures.dat","failure.dat");
+
+}
+
+
+
+
+void modify()
+{
+	int rn,p=0;
+	cout<<"\n\n\t\tEnter roll number to be modified  ";
+	cin>>rn;
+	int flag=0;
+	student st,stud;
+	fstream file;
+	ofstream a,b;
+	a.open("t.dat",ios::binary|ios::out);
+	b.open("f.dat",ios::binary|ios::out);
+	file.open("student.dat",ios::binary|ios::in|ios::out);
+
+	if(!file)
+		{
+			cout<<"\n\n\t\tFile could not be found"<<endl;
+			delay(3000);
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+		}
+
+	int pos=0;
+	file.seekg(0,ios::beg);  //to go to beginning of file
+
+	while(!file.eof())
+		{
+			pos=file.tellg();
+			file.read((char*)&st,sizeof(student));
+			if(st.getrollno()==rn)
+				{
+					st.showdata();
+					getch();
+					cout<<endl<<endl;
+					clrscr();
+					cout<<"\n\n\t\tEnter new details of student"<<endl;
+					p=st.newdata();
+					file.seekg(pos);
+					file.write((char*)&st,sizeof(student));
+					if(p>=75)
+					a.write((char*)&st,sizeof(student));
+					else if(p<33)
+					b.write((char*)&st,sizeof(student));
+					flag=1;
+					cout<<"\n\n\t\tRecord modified!"<<endl;
+					getch();
+					break;
+				}//end of if
+		}//end of while
+
+	file.close();
+	a.close();
+	b.close();
+
+	if(flag==0)
+		{
+			cout<<"\n\n\t\trecord not found";
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+		}
+
+
+	ifstream f,f1;
+	f.open("topper.dat",ios::in);
+	f1.open("failure.dat",ios::in);
+	a.open("t.dat",ios::binary|ios::app);
+	b.open("f.dat",ios::binary|ios::app);
+
+	//to change in list of toppers
+	while(f.read((char*)&st,sizeof(student)))
+	{
+		if(st.getrollno()!=rn)
+		a.write((char*)&st,sizeof(student));
+	}
+
+	//to change in list of failures
+	while(f1.read((char*)&stud,sizeof(student)))
+	{
+		if(stud.getrollno()!=rn)
+		b.write((char*)&stud,sizeof(student));
+	}
+
+	a.close();
+	b.close();
+	f.close();
+	f1.close();
+	remove("topper.dat");
+	remove("failure.dat");
+	rename("t.dat","topper.dat");
+	rename("f.dat","failure.dat");
+
+} //end of modify function
+
+
+
+
+int student::newdata()
+{
+	student st;
+	int x=0;
+	int p,c,m,e,cs;
+	char nm[20];
+	cout<<"\n\t\tNew name: (Enter '.' to retain old one)  ";
+	cin>>nm;
+	cout<<"\n\t\tNew marks : (Enter '-1' to retain old one)"<<endl;
+	cout<<"\n\t\tIn physics:  ";
+	cin>>p;
+	cout<<"\n\t\tIn chemistry:  ";
+	cin>>c;
+	cout<<"\n\t\tIn maths:  ";
+	cin>>m;
+	cout<<"\n\t\tIn english:  ";
+	cin>>e;
+	cout<<"\n\t\tIn computer:  ";
+	cin>>cs;
+
+
+	if(strcmp(nm,".")!=0)
+	strcpy(name,nm);
+
+	if(p!=-1)
+	p_marks=p  ;
+
+	if(c!=-1)
+	c_marks=c;
+
+	if(m!=-1)
+	m_marks=m;
+
+	if(e!=-1)
+	e_marks=e;
+
+	if(cs!=-1)
+	cs_marks=cs;
+
+	x=calculate();
+	st.per=x;
+	return x;
+}
+
+
+
+
+void topper()
+{
+	student st;
+	ifstream infile;
+	infile.open("topper.dat",ios::binary|ios::in);
+	cout<<"\n\n\t\tSTUDENTS SCORING ABOVE 75%\n\n";
+	if(!infile)
+		{
+			cout<<"\n\n\t\tFile could not be found"<<endl;
+			delay(3000);
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+		}
+
+	while(infile.read((char*)&st,sizeof(student)))
+	{
+		st.putdata();
+		cout<<"\n\t\t***************************\n";
+	}
+
+	infile.close();
+	getch();
+}
+
+
+
+void failure()
+{
+	student st;
+	ifstream in;
+	in.open("failure.dat",ios::binary|ios::in);
+	cout<<"\n\n\t\tSTUDENTS SCORING BELOW 33%\n\n";
+
+	if(!in)
+		{
+			cout<<"\n\n\t\tFile could not be found"<<endl;
+			delay(3000);
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+		}
+
+	while(in.read((char*)&st,sizeof(student)))
+	{
+		st.putdata();
+		cout<<"\n\t\t***************************\n";
+	}
+
+	in.close();
+	getch();
+}
+
+
+
+void insert()
+{
+	student st,stud;
+	char last='y';
+	float a;
+	ifstream fi;
+	fi.open("student.dat",ios::in|ios::binary);
+	ofstream fo,outfile,out;
+	fo.open("temp.dat",ios::out|ios::binary);
+	outfile.open("topper.dat",ios::app|ios::binary);
+	out.open("failure.dat",ios::app|ios::binary);
+	cout<<"\n\n\t\tEnter details of student whose record is to be inserted\n";
+	a=st.getdata();
+
+	if(a>75)
+	outfile.write((char*)&st,sizeof(student));
+
+	if(a<33)
+	out.write((char*)&st,sizeof(student));
+
+	if(!fi)
+		{
+			cout<<"\n\n\t\tFile could not be found"<<endl;
+			delay(3000);
+			cout<<endl<<endl;
+			cout<<"\t\tPROCESSING.....";
+			delay(3000);
+		}
+
+
+	while(!fi.eof())
+	{
+		fi.read((char*)&stud,sizeof(student));
+		if(st.getrollno()<=stud.getrollno())
+		{
+		  fo.write((char*)&st,sizeof(student));
+		  last='n';
+		  break;
+		}
+
+		else
+		fo.write((char*)&stud,sizeof(student));
+	}
+
+	if(last=='y')
+	fo.write((char*)&st,sizeof(student));
+
+	else if(!fi.eof())
+	{
+		while(!fi.eof())
+		{
+		  fi.read((char*)&stud,sizeof(student));
+		  fo.write((char*)&stud,sizeof(student));
+		}
+	}
+
+	cout<<"\n\n\t\tRecord inserted"<<endl;
+
+	fi.close();
+	fo.close();
+
+	remove("student.dat");
+	rename("temp.dat","student.dat");
+	getch();
+}
+
